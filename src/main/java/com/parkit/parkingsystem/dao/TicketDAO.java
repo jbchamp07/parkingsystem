@@ -8,10 +8,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.*;
 
 public class TicketDAO {
 
@@ -86,4 +83,27 @@ public class TicketDAO {
         }
         return false;
     }
+
+    public boolean testTicket(Ticket ticket) {
+        Connection con = null;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.TEST_TICKET);
+            ps.setString(1,ticket.getVehicleRegNumber());
+            ps.setInt(2,ticket.getId());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next() == false){
+                return false;
+            }else{
+                return true;
+            }
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
 }

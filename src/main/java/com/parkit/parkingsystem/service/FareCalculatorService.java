@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.constants.Fare;
+import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.Ticket;
 
 import java.time.LocalDateTime;
@@ -23,15 +24,26 @@ public class FareCalculatorService {
         LocalDateTime ldtOut = LocalDateTime.ofInstant(ticket.getOutTime().toInstant(),
                 ZoneId.systemDefault());
         int differenceInMinutes = (int) ChronoUnit.MINUTES.between(ldtIn, ldtOut);
-        int differenceInDays = (int) ChronoUnit.DAYS.between(ldtIn, ldtOut);
-        int differenceInHeures = 0;
-        if(differenceInMinutes / 60 > 0){
-            differenceInHeures = differenceInMinutes / 60;
+        double duration = 0;
+        if(differenceInMinutes <= 30){
+            duration = 0;
+        }else{
+            int differenceInDays = (int) ChronoUnit.DAYS.between(ldtIn, ldtOut);
+            int differenceInHeures = 0;
+            if(differenceInMinutes / 60 > 0){
+                differenceInHeures = differenceInMinutes / 60;
+            }
+            if(differenceInMinutes == 60){
+                differenceInMinutes = 0;
+            }
+            duration = differenceInHeures + ((double)differenceInMinutes/60) - (differenceInHeures * differenceInDays);
         }
-        if(differenceInMinutes == 60){
-            differenceInMinutes = 0;
+        TicketDAO ticketDAO = new TicketDAO();
+        boolean ticketState = ticketDAO.testTicket(ticket);
+        if(ticketState == true){
+            duration = duration * 0.95;
         }
-        double duration = differenceInHeures + ((double)differenceInMinutes/60) - (differenceInHeures * differenceInDays);
+
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
