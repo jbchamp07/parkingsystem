@@ -4,6 +4,7 @@ import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
+import com.parkit.parkingsystem.model.Ticket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -48,6 +49,28 @@ public class ParkingSpotDAO {
             int updateRowCount = ps.executeUpdate();
             dataBaseConfig.closePreparedStatement(ps);
             return (updateRowCount == 1);
+        }catch (Exception ex){
+            logger.error("Error updating parking info",ex);
+            return false;
+        }finally {
+            dataBaseConfig.closeConnection(con);
+        }
+    }
+
+    //verify slot
+    public boolean verifyParkingSpot(Ticket ticket){
+        Connection con = null;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.VERIFY_PARKING_SPOT);
+            ps.setInt(1, ticket.getParkingSpot().getId());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getBoolean("AVAILABLE");
+            }else{
+                return true;
+            }
+            //dataBaseConfig.closePreparedStatement(ps);
         }catch (Exception ex){
             logger.error("Error updating parking info",ex);
             return false;

@@ -90,7 +90,6 @@ public class TicketDAO {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.TEST_TICKET);
             ps.setString(1,ticket.getVehicleRegNumber());
-            ps.setInt(2,ticket.getId());
             ResultSet rs = ps.executeQuery();
             if(rs.next() == false){
                 return false;
@@ -98,6 +97,27 @@ public class TicketDAO {
                 return true;
             }
 
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public boolean doesTicketExist(Ticket ticket) {
+        Connection con = null;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.EXIST_TICKET);
+            ps.setString(1,ticket.getVehicleRegNumber());
+            ps.setInt(2,ticket.getId());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next() == false){
+                return false;
+            }else{
+                return true;
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
