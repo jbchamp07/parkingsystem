@@ -11,24 +11,33 @@ import com.parkit.parkingsystem.service.FareCalculatorService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
+@ExtendWith(MockitoExtension.class)
 public class FareCalculatorServiceTest {
 
     private static FareCalculatorService fareCalculatorService;
     private Ticket ticket;
 
+    @Mock
+    private TicketDAO ticketDAO;
+
     @BeforeAll
     private static void setUp() {
-        fareCalculatorService = new FareCalculatorService();
+
     }
 
     @BeforeEach
     private void setUpPerTest() {
         ticket = new Ticket();
+        fareCalculatorService = new FareCalculatorService(ticketDAO);
     }
 
     @Test
@@ -129,9 +138,7 @@ public class FareCalculatorServiceTest {
 //a faire
     @Test
     public void calculateFareCarWithrecurrence(){
-
-
-
+        when(ticketDAO.testTicket(ticket)).thenReturn(true);
 
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
@@ -141,14 +148,12 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals( (Math.round(24 * Fare.CAR_RATE_PER_HOUR * 0.95)) , ticket.getPrice());
+        assertEquals((Math.round(24 * Fare.CAR_RATE_PER_HOUR * 0.95)) , (Math.round(ticket.getPrice())));
     }
 //a faire
     @Test
     public void calculateFareBikeWithrecurrence(){
-
-
-
+        when(ticketDAO.testTicket(ticket)).thenReturn(true);
 
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour

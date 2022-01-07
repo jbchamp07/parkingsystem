@@ -9,6 +9,10 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
 public class FareCalculatorService {
+    private final TicketDAO ticketDAO;
+    public FareCalculatorService(TicketDAO ticketDAO) {
+        this.ticketDAO = ticketDAO;
+    }
 
     public void calculateFare(Ticket ticket){
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
@@ -38,8 +42,8 @@ public class FareCalculatorService {
             }
             duration = differenceInHeures + ((double)differenceInMinutes/60) - (differenceInHeures * differenceInDays);
         }
-        TicketDAO ticketDAO = new TicketDAO();
-        boolean ticketState = ticketDAO.testTicket(ticket);
+        //TicketDAO ticketDAO = new TicketDAO();
+        boolean ticketState = this.ticketDAO.testTicket(ticket);
         if(ticketState == true){
             duration = duration * 0.95;
         }
