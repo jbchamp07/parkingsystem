@@ -48,19 +48,11 @@ public class TicketDAOTest {
         ticket.setOutTime(new Date());
         ticketDAO.saveTicket(ticket);
         assertNotNull(ticketDAO.getTicket("ABCDEF"));
-
     }
 
-    /*@Test
+    @Test
     public void getTicketTest() {
-
-        try {
-            when(ticketDAO.dataBaseConfig.getConnection()).thenReturn(dataBaseTestConfig.getConnection());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        saveTicketTest();
         ticket = ticketDAO.getTicket("ABCDEF");
         assertEquals(1,ticket.getId());
 
@@ -68,61 +60,34 @@ public class TicketDAOTest {
 
     @Test
     public void updateTicketTest() {
-
-        try {
-            when(ticketDAO.dataBaseConfig.getConnection()).thenReturn(dataBaseTestConfig.getConnection());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        ticket.setVehicleRegNumber("abcd");
+        saveTicketTest();
+        ticket.setId(1);
+        ticket.setVehicleRegNumber("ABCDEF");
         ticket.setPrice(10);
         ticket.setParkingSpot(new ParkingSpot(1,ParkingType.CAR,true));
         ticket.setInTime(new Date());
         ticket.setOutTime(new Date());
-        assertEquals(false,ticketDAO.updateTicket(ticket));
+        ticketDAO.updateTicket(ticket);
+        assertEquals(10,ticketDAO.getTicket("ABCDEF").getPrice());
     }
 
     @Test
     public void testTicketTestOk() {
-        try {
-            when(ticketDAO.dataBaseConfig.getConnection()).thenReturn(dataBaseTestConfig.getConnection());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        saveTicketTest();
         ticket.setVehicleRegNumber("ABCDEF");
         ticket.setOutTime(new Date());
         assertEquals(true,ticketDAO.testTicket(ticket));
-
-
     }
 
     @Test
     public void testTicketTestNotOk() {
-        try {
-            when(ticketDAO.dataBaseConfig.getConnection()).thenReturn(dataBaseTestConfig.getConnection());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        ticket.setVehicleRegNumber("a");
+        ticket.setVehicleRegNumber("ABCDEF");
         assertEquals(false,ticketDAO.testTicket(ticket));
-
     }
 
     @Test
     public void doesTicketExistTestOk() {
-        try {
-            when(ticketDAO.dataBaseConfig.getConnection()).thenReturn(dataBaseTestConfig.getConnection());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        saveTicketTest();
         ticket.setId(1);
         ticket.setVehicleRegNumber("ABCDEF");
         assertEquals(true,ticketDAO.doesTicketExist(ticket));
@@ -130,16 +95,9 @@ public class TicketDAOTest {
 
     @Test
     public void doesTicketExistTestNotOk() {
-        try {
-            when(ticketDAO.dataBaseConfig.getConnection()).thenReturn(dataBaseTestConfig.getConnection());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         ticket.setId(1);
         ticket.setVehicleRegNumber("ABCDEF");
-        assertEquals(true,ticketDAO.doesTicketExist(ticket));
+        assertEquals(false,ticketDAO.doesTicketExist(ticket));
     }
-*/
+
 }
