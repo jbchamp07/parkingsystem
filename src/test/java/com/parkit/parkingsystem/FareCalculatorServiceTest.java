@@ -135,7 +135,7 @@ public class FareCalculatorServiceTest {
         fareCalculatorService.calculateFare(ticket);
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
-//a faire
+
     @Test
     public void calculateFareCarWithrecurrence(){
         when(ticketDAO.testTicket(ticket)).thenReturn(true);
@@ -150,7 +150,7 @@ public class FareCalculatorServiceTest {
         fareCalculatorService.calculateFare(ticket);
         assertEquals((Math.round(24 * Fare.CAR_RATE_PER_HOUR * 0.95)) , (Math.round(ticket.getPrice())));
     }
-//a faire
+
     @Test
     public void calculateFareBikeWithrecurrence(){
         when(ticketDAO.testTicket(ticket)).thenReturn(true);

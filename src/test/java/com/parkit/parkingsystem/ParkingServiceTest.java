@@ -58,10 +58,15 @@ public class ParkingServiceTest {
         parkingService.processExitingVehicle();
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     }
-
-   /* @Test
-    public void getNextParkingNumberIfAvailableTest(){
-        assertEquals(1,parkingService.getNextParkingNumberIfAvailable());
-    }*/
+//a faire
+    @Test
+    public void processIncomingVehicleTest(){
+        parkingService.processIncomingVehicle();
+        ParkingType pkt = ParkingType.CAR;
+        when(parkingService.getNextParkingNumberIfAvailable()).thenReturn(new ParkingSpot(5,pkt,true));
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
+        //assertEquals(1,parkingService.getNextParkingNumberIfAvailable());
+    }
 
 }
