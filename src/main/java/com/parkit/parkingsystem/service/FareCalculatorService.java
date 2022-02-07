@@ -8,48 +8,73 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * The type Fare calculator service.
+ */
 public class FareCalculatorService {
+
+    /**
+     * The TicketDAO.
+     */
     private final TicketDAO ticketDAO;
+
+    /**
+     * Instantiates a new Fare calculator service.
+     *
+     * @param ticketDAO the ticket dao
+     */
     public FareCalculatorService(TicketDAO ticketDAO) {
         this.ticketDAO = ticketDAO;
     }
 
-    public void calculateFare(Ticket ticket){
-        if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
-            throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
+    /**
+     * Calculate fare.
+     *
+     * @param ticket the ticket
+     */
+    public void calculateFare(Ticket ticket) {
+        if ((ticket.getOutTime() == null)
+               || (ticket.getOutTime().before(ticket.getInTime()))) {
+            throw new IllegalArgumentException("Out time provided is incorrect:"
+                    + ticket.getOutTime().toString());
         }
 
         //int inHour = ticket.getInTime().getHours();
         //int outHour = ticket.getOutTime().getHours();
 
-        //TODO: Some tests are failing here. Need to check if this logic is correct
-        LocalDateTime ldtIn = LocalDateTime.ofInstant(ticket.getInTime().toInstant(),
+    //TOD: Some tests are failing here. Need to check if this logic is correct
+        LocalDateTime ldtIn = LocalDateTime.ofInstant(ticket.getInTime()
+                        .toInstant(),
                 ZoneId.systemDefault());
-        LocalDateTime ldtOut = LocalDateTime.ofInstant(ticket.getOutTime().toInstant(),
+        LocalDateTime ldtOut = LocalDateTime.ofInstant(ticket.getOutTime()
+                        .toInstant(),
                 ZoneId.systemDefault());
-        int differenceInMinutes = (int) ChronoUnit.MINUTES.between(ldtIn, ldtOut);
+        int differenceInMinutes = (int) ChronoUnit.MINUTES.between(ldtIn,
+                ldtOut);
         double duration = 0;
-        if(differenceInMinutes <= 30){
+        if (differenceInMinutes <= 30) {
             duration = 0;
-        }else{
-            int differenceInDays = (int) ChronoUnit.DAYS.between(ldtIn, ldtOut);
+        } else {
+            int differenceInDays = (int) ChronoUnit.DAYS.between(ldtIn,
+                    ldtOut);
             int differenceInHeures = 0;
-            if(differenceInMinutes / 60 > 0){
+            if (differenceInMinutes / 60 > 0) {
                 differenceInHeures = differenceInMinutes / 60;
             }
-            if(differenceInMinutes == 60){
+            if (differenceInMinutes == 60) {
                 differenceInMinutes = 0;
             }
-            duration = differenceInHeures + ((double)differenceInMinutes/60) - (differenceInHeures * differenceInDays);
+            duration = differenceInHeures + ((double) differenceInMinutes / 60)
+                    - (differenceInHeures * differenceInDays);
         }
         //TicketDAO ticketDAO = new TicketDAO();
         boolean ticketState = this.ticketDAO.testTicket(ticket);
-        if(ticketState == true){
+        if (ticketState == true) {
             duration = duration * 0.95;
         }
 
 
-        switch (ticket.getParkingSpot().getParkingType()){
+        switch (ticket.getParkingSpot().getParkingType()) {
             case CAR: {
                 ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
                 break;
