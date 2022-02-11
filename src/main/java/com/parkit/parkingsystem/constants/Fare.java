@@ -3,7 +3,7 @@ package com.parkit.parkingsystem.constants;
 /**
  * The type Fare.
  */
-public class Fare {
+public abstract class Fare {
     /**
      * The constant BIKE_RATE_PER_HOUR.
      */

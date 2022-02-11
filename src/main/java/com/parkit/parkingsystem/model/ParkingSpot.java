@@ -1,3 +1,6 @@
+/**
+ * Info about this package doing something for package-info.java file.
+ */
 package com.parkit.parkingsystem.model;
 
 import com.parkit.parkingsystem.constants.ParkingType;
@@ -22,15 +25,15 @@ public class ParkingSpot {
     /**
      * Instantiates a new Parking spot.
      *
-     * @param number      the number
-     * @param parkingType the parking type
-     * @param isAvailable the is available
+     * @param nbr      the number
+     * @param pkType the parking type
+     * @param isAv the is available
      */
-    public ParkingSpot(int number, ParkingType parkingType,
-                       boolean isAvailable) {
-        this.number = number;
-        this.parkingType = parkingType;
-        this.isAvailable = isAvailable;
+    public ParkingSpot(final int nbr, final ParkingType pkType,
+                       final boolean isAv) {
+        this.number = nbr;
+        this.parkingType = pkType;
+        this.isAvailable = isAv;
     }
 
     /**
@@ -45,10 +48,10 @@ public class ParkingSpot {
     /**
      * Sets id.
      *
-     * @param number the number
+     * @param nbr the number
      */
-    public void setId(int number) {
-        this.number = number;
+    public void setId(final int nbr) {
+        this.number = nbr;
     }
 
     /**
@@ -63,10 +66,10 @@ public class ParkingSpot {
     /**
      * Sets parking type.
      *
-     * @param parkingType the parking type
+     * @param pkType the parking type
      */
-    public void setParkingType(ParkingType parkingType) {
-        this.parkingType = parkingType;
+    public void setParkingType(final ParkingType pkType) {
+        this.parkingType = pkType;
     }
 
     /**
@@ -83,7 +86,7 @@ public class ParkingSpot {
      *
      * @param available the available
      */
-    public void setAvailable(boolean available) {
+    public void setAvailable(final boolean available) {
         isAvailable = available;
     }
 
@@ -93,8 +96,8 @@ public class ParkingSpot {
      * @param o the Object,
      */
     @Override
-    public boolean equals(Object o) {
-        if (this == o){
+    public boolean equals(final Object o) {
+        if (this == o) {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {

@@ -35,7 +35,7 @@ public class TicketDAOTest {
 
     @BeforeEach
     private void setUpPerTest() {;
-        ticketDAO.dataBaseConfig = dataBaseTestConfig;
+        ticketDAO.setDataBaseConfig(dataBaseTestConfig);
         dataBasePrepareService.clearDataBaseEntries();
     }
 

@@ -3,8 +3,7 @@ package com.parkit.parkingsystem.constants;
 /**
  * The type Db constants.
  */
-public class DBConstants {
-
+public abstract class DBConstants {
     /**
      * The constant GET_NEXT_PARKING_SPOT.
      */

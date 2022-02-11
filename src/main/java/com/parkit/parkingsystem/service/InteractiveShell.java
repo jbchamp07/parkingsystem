@@ -9,19 +9,19 @@ import org.apache.logging.log4j.Logger;
 /**
  * The type Interactive shell.
  */
-public class InteractiveShell {
+public abstract class InteractiveShell {
 
     /**
      * The Logger.
      */
-    private static final Logger logger =
+    private static final Logger LOGGER =
             LogManager.getLogger("InteractiveShell");
 
     /**
      * Load interface.
      */
     public static void loadInterface() {
-        logger.info("App initialized!!!");
+        LOGGER.info("App initialized!!!");
         System.out.println("Welcome to Parking System!");
 
         boolean continueApp = true;
@@ -30,24 +30,21 @@ public class InteractiveShell {
         TicketDAO ticketDAO = new TicketDAO();
         ParkingService parkingService =
                 new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-
+        final int exit = 3;
         while (continueApp) {
             loadMenu();
             int option = inputReaderUtil.readSelection();
             switch (option) {
-                case 1: {
+                case 1:
                     parkingService.processIncomingVehicle();
                     break;
-                }
-                case 2: {
+                case 2:
                     parkingService.processExitingVehicle();
                     break;
-                }
-                case 3: {
+                case exit:
                     System.out.println("Exiting from the system!");
                     continueApp = false;
                     break;
-                }
                 default: System.out.println("Unsupported option. "
                         + "Please enter a number corresponding "
                         + "to the provided menu");

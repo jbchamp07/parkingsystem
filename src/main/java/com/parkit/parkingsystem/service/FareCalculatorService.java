@@ -21,10 +21,10 @@ public class FareCalculatorService {
     /**
      * Instantiates a new Fare calculator service.
      *
-     * @param ticketDAO the ticket dao
+     * @param tDAO the ticket dao
      */
-    public FareCalculatorService(TicketDAO ticketDAO) {
-        this.ticketDAO = ticketDAO;
+    public FareCalculatorService(final TicketDAO tDAO) {
+        this.ticketDAO = tDAO;
     }
 
     /**
@@ -32,13 +32,15 @@ public class FareCalculatorService {
      *
      * @param ticket the ticket
      */
-    public void calculateFare(Ticket ticket) {
+    public void calculateFare(final Ticket ticket) {
         if ((ticket.getOutTime() == null)
                || (ticket.getOutTime().before(ticket.getInTime()))) {
             throw new IllegalArgumentException("Out time provided is incorrect:"
                     + ticket.getOutTime().toString());
         }
-
+        final int halfHourInMinutes = 30;
+        final int anHourInMinutes = 60;
+        final double rationReduction = 0.95;
         //int inHour = ticket.getInTime().getHours();
         //int outHour = ticket.getOutTime().getHours();
 
@@ -52,37 +54,36 @@ public class FareCalculatorService {
         int differenceInMinutes = (int) ChronoUnit.MINUTES.between(ldtIn,
                 ldtOut);
         double duration = 0;
-        if (differenceInMinutes <= 30) {
+        if (differenceInMinutes <= halfHourInMinutes) {
             duration = 0;
         } else {
             int differenceInDays = (int) ChronoUnit.DAYS.between(ldtIn,
                     ldtOut);
             int differenceInHeures = 0;
-            if (differenceInMinutes / 60 > 0) {
-                differenceInHeures = differenceInMinutes / 60;
+            if (differenceInMinutes / anHourInMinutes > 0) {
+                differenceInHeures = differenceInMinutes / anHourInMinutes;
             }
-            if (differenceInMinutes == 60) {
+            if (differenceInMinutes == anHourInMinutes) {
                 differenceInMinutes = 0;
             }
-            duration = differenceInHeures + ((double) differenceInMinutes / 60)
+            duration = differenceInHeures
+                    + ((double) differenceInMinutes / anHourInMinutes)
                     - (differenceInHeures * differenceInDays);
         }
         //TicketDAO ticketDAO = new TicketDAO();
         boolean ticketState = this.ticketDAO.testTicket(ticket);
-        if (ticketState == true) {
-            duration = duration * 0.95;
+        if (ticketState) {
+            duration = duration * rationReduction;
         }
 
 
         switch (ticket.getParkingSpot().getParkingType()) {
-            case CAR: {
+            case CAR:
                 ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
                 break;
-            }
-            case BIKE: {
+            case BIKE:
                 ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
                 break;
-            }
             default: throw new IllegalArgumentException("Unkown Parking Type");
         }
     }

@@ -43,10 +43,10 @@ public class Ticket {
     /**
      * Sets id.
      *
-     * @param id the id
+     * @param idParam the id
      */
-    public void setId(int id) {
-        this.id = id;
+    public void setId(final int idParam) {
+        this.id = idParam;
     }
 
     /**
@@ -61,10 +61,10 @@ public class Ticket {
     /**
      * Sets parking spot.
      *
-     * @param parkingSpot the parking spot
+     * @param pkSpot the parking spot
      */
-    public void setParkingSpot(ParkingSpot parkingSpot) {
-        this.parkingSpot = parkingSpot;
+    public void setParkingSpot(final ParkingSpot pkSpot) {
+        this.parkingSpot = pkSpot;
     }
 
     /**
@@ -79,10 +79,10 @@ public class Ticket {
     /**
      * Sets vehicle reg number.
      *
-     * @param vehicleRegNumber the vehicle reg number
+     * @param vRegNbr the vehicle reg number
      */
-    public void setVehicleRegNumber(String vehicleRegNumber) {
-        this.vehicleRegNumber = vehicleRegNumber;
+    public void setVehicleRegNumber(final String vRegNbr) {
+        this.vehicleRegNumber = vRegNbr;
     }
 
     /**
@@ -97,10 +97,10 @@ public class Ticket {
     /**
      * Sets price.
      *
-     * @param price the price
+     * @param priceParam the price
      */
-    public void setPrice(double price) {
-        this.price = price;
+    public void setPrice(final double priceParam) {
+        this.price = priceParam;
     }
 
     /**
@@ -115,10 +115,10 @@ public class Ticket {
     /**
      * Sets in time.
      *
-     * @param inTime the in time
+     * @param inTimeParam the in time
      */
-    public void setInTime(Date inTime) {
-        this.inTime = inTime;
+    public void setInTime(final Date inTimeParam) {
+        this.inTime = inTimeParam;
     }
 
     /**
@@ -133,9 +133,9 @@ public class Ticket {
     /**
      * Sets out time.
      *
-     * @param outTime the out time
+     * @param outTimeParam the out time
      */
-    public void setOutTime(Date outTime) {
-        this.outTime = outTime;
+    public void setOutTime(final Date outTimeParam) {
+        this.outTime = outTimeParam;
     }
 }

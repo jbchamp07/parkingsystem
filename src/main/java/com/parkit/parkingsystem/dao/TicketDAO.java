@@ -23,12 +23,30 @@ public class TicketDAO {
     /**
      * The Logger.
      */
-    private static final Logger logger = LogManager.getLogger("TicketDAO");
+    private static final Logger LOGGER = LogManager.getLogger("TicketDAO");
+
+    /**
+     * Gets data base config.
+     *
+     * @return the data base config
+     */
+    public DataBaseConfig getDataBaseConfig() {
+        return dataBaseConfig;
+    }
+
+    /**
+     * Sets data base config.
+     *
+     * @param dtbConf the data base config
+     */
+    public void setDataBaseConfig(final DataBaseConfig dtbConf) {
+        this.dataBaseConfig = dtbConf;
+    }
 
     /**
      * The Data base config.
      */
-    public DataBaseConfig dataBaseConfig = new DataBaseConfig();
+    private DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
     /**
      * Save ticket boolean.
@@ -36,8 +54,11 @@ public class TicketDAO {
      * @param ticket the ticket
      * @return the boolean
      */
-    public boolean saveTicket(Ticket ticket) {
+    public boolean saveTicket(final Ticket ticket) {
         Connection con = null;
+        final int collumn3 = 3;
+        final int collumn4 = 4;
+        final int collumn5 = 5;
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps =
@@ -46,13 +67,14 @@ public class TicketDAO {
             //ps.setInt(1,ticket.getId());
             ps.setInt(1, ticket.getParkingSpot().getId());
             ps.setString(2, ticket.getVehicleRegNumber());
-            ps.setDouble(3, ticket.getPrice());
-            ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
-            ps.setTimestamp(5, (ticket.getOutTime() == null)
+            ps.setDouble(collumn3, ticket.getPrice());
+            ps.setTimestamp(collumn4,
+                    new Timestamp(ticket.getInTime().getTime()));
+            ps.setTimestamp(collumn5, (ticket.getOutTime() == null)
                     ? null : (new Timestamp(ticket.getOutTime().getTime())));
             return ps.execute();
         } catch (Exception ex) {
-            logger.error("Error fetching next available slot", ex);
+            LOGGER.error("Error fetching next available slot", ex);
         } finally {
             dataBaseConfig.closeConnection(con);
             return false;
@@ -65,9 +87,10 @@ public class TicketDAO {
      * @param vehicleRegNumber the vehicle reg number
      * @return the ticket
      */
-    public Ticket getTicket(String vehicleRegNumber) {
+    public Ticket getTicket(final String vehicleRegNumber) {
         Connection con = null;
         Ticket ticket = null;
+        final int column6 = 6;
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps =
@@ -79,18 +102,19 @@ public class TicketDAO {
                 ticket = new Ticket();
                 ParkingSpot parkingSpot =
                         new ParkingSpot(rs.getInt(1),
-                                ParkingType.valueOf(rs.getString(6)), false);
+                                ParkingType.valueOf(rs.getString(column6)),
+                                false);
                 ticket.setParkingSpot(parkingSpot);
                 ticket.setId(rs.getInt(2));
                 ticket.setVehicleRegNumber(vehicleRegNumber);
-                ticket.setPrice(rs.getDouble(3));
-                ticket.setInTime(rs.getTimestamp(4));
-                ticket.setOutTime(rs.getTimestamp(5));
+                ticket.setPrice(rs.getDouble("PRICE"));
+                ticket.setInTime(rs.getTimestamp("IN_TIME"));
+                ticket.setOutTime(rs.getTimestamp("OUT_TIME"));
             }
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
         } catch (Exception ex) {
-            logger.error("Error fetching next available slot", ex);
+            LOGGER.error("Error fetching next available slot", ex);
         } finally {
             dataBaseConfig.closeConnection(con);
             return ticket;
@@ -103,8 +127,9 @@ public class TicketDAO {
      * @param ticket the ticket
      * @return the boolean
      */
-    public boolean updateTicket(Ticket ticket) {
+    public boolean updateTicket(final Ticket ticket) {
         Connection con = null;
+        final int column3 = 3;
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps =
@@ -112,11 +137,11 @@ public class TicketDAO {
             ps.setDouble(1, ticket.getPrice());
             ps.setTimestamp(2,
                     new Timestamp(ticket.getOutTime().getTime()));
-            ps.setInt(3, ticket.getId());
+            ps.setInt(column3, ticket.getId());
             ps.execute();
             return true;
         } catch (Exception ex) {
-            logger.error("Error saving ticket info", ex);
+            LOGGER.error("Error saving ticket info", ex);
         } finally {
             dataBaseConfig.closeConnection(con);
         }
@@ -129,7 +154,7 @@ public class TicketDAO {
      * @param ticket the ticket
      * @return the boolean
      */
-    public boolean testTicket(Ticket ticket) {
+    public boolean testTicket(final Ticket ticket) {
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
@@ -137,7 +162,7 @@ public class TicketDAO {
                     con.prepareStatement(DBConstants.TEST_TICKET);
             ps.setString(1, ticket.getVehicleRegNumber());
             ResultSet rs = ps.executeQuery();
-            if (rs.next() == false) {
+            if (!rs.next()) {
                 return false;
             } else {
                 return true;
@@ -157,7 +182,7 @@ public class TicketDAO {
      * @param ticket the ticket
      * @return the boolean
      */
-    public boolean doesTicketExist(Ticket ticket) {
+    public boolean doesTicketExist(final Ticket ticket) {
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
@@ -166,7 +191,7 @@ public class TicketDAO {
             ps.setString(1, ticket.getVehicleRegNumber());
             ps.setInt(2, ticket.getId());
             ResultSet rs = ps.executeQuery();
-            if (rs.next() == false) {
+            if (!rs.next()) {
                 return false;
             } else {
                 return true;

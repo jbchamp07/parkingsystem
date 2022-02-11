@@ -20,7 +20,7 @@ public class ParkingService {
     /**
      * The Logger.
      */
-    private static final Logger logger = LogManager.getLogger("ParkingService");
+    private static final Logger LOGGER = LogManager.getLogger("ParkingService");
     /**
      * The FareCalculatorService.
      */
@@ -42,15 +42,16 @@ public class ParkingService {
     /**
      * Instantiates a new Parking service.
      *
-     * @param inputReaderUtil the input reader util
-     * @param parkingSpotDAO  the parking spot dao
-     * @param ticketDAO       the ticket dao
+     * @param iRU the input reader util
+     * @param pkSpotDAO  the parking spot dao
+     * @param tDAO       the ticket dao
      */
-    public ParkingService(InputReaderUtil inputReaderUtil,
-                          ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO) {
-        this.inputReaderUtil = inputReaderUtil;
-        this.parkingSpotDAO = parkingSpotDAO;
-        this.ticketDAO = ticketDAO;
+    public ParkingService(final InputReaderUtil iRU,
+                          final ParkingSpotDAO pkSpotDAO,
+                          final TicketDAO tDAO) {
+        this.inputReaderUtil = iRU;
+        this.parkingSpotDAO = pkSpotDAO;
+        this.ticketDAO = tDAO;
     }
 
     /**
@@ -81,7 +82,7 @@ public class ParkingService {
                         + vehicleRegNumber + " is:" + inTime);
             }
         } catch (Exception e) {
-            logger.error("Unable to process incoming vehicle", e);
+            LOGGER.error("Unable to process incoming vehicle", e);
         }
     }
 
@@ -109,9 +110,9 @@ public class ParkingService {
                         + " Parking slots might be full");
             }
         } catch (IllegalArgumentException ie) {
-            logger.error("Error parsing user input for type of vehicle", ie);
+            LOGGER.error("Error parsing user input for type of vehicle", ie);
         } catch (Exception e) {
-            logger.error("Error fetching next available parking slot", e);
+            LOGGER.error("Error fetching next available parking slot", e);
         }
         return parkingSpot;
     }
@@ -122,19 +123,15 @@ public class ParkingService {
         System.out.println("2 BIKE");
         int input = inputReaderUtil.readSelection();
         switch (input) {
-            case 1: {
+            case 1:
                 return ParkingType.CAR;
-            }
-            case 2: {
+            case 2:
                 return ParkingType.BIKE;
-            }
-            default: {
+            default:
                 System.out.println("Incorrect input provided");
                 throw new IllegalArgumentException("Entered input is invalid");
-            }
         }
     }
-
     /**
      * Process exiting vehicle.
      */
@@ -159,7 +156,7 @@ public class ParkingService {
                         + " Error occurred");
             }
         } catch (Exception e) {
-            logger.error("Unable to process exiting vehicle", e);
+            LOGGER.error("Unable to process exiting vehicle", e);
         }
     }
 }
