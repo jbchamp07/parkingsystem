@@ -4,6 +4,9 @@ import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.Ticket;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -69,20 +72,21 @@ public class FareCalculatorService {
             duration = differenceInHeures
                     + ((double) differenceInMinutes / anHourInMinutes)
                     - (differenceInHeures * differenceInDays);
+
         }
-        //TicketDAO ticketDAO = new TicketDAO();
         boolean ticketState = this.ticketDAO.testTicket(ticket);
         if (ticketState) {
             duration = duration * rationReduction;
+
         }
-
-
         switch (ticket.getParkingSpot().getParkingType()) {
             case CAR:
-                ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
+                ticket.setPrice(BigDecimal.valueOf(duration * Fare.CAR_RATE_PER_HOUR).setScale(2, RoundingMode.HALF_UP).doubleValue());
+                //ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
                 break;
             case BIKE:
-                ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
+                ticket.setPrice(BigDecimal.valueOf(duration * Fare.BIKE_RATE_PER_HOUR).setScale(2, RoundingMode.HALF_UP).doubleValue());
+                //ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
                 break;
             default: throw new IllegalArgumentException("Unkown Parking Type");
         }

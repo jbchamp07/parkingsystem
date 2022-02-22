@@ -1,8 +1,12 @@
 package com.parkit.parkingsystem.util;
 
+import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.model.Ticket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.util.Scanner;
 
 /**
@@ -49,6 +53,14 @@ public class InputReaderUtil {
             if (vehicleRegNumber == null
                     || vehicleRegNumber.trim().length() == 0) {
                 throw new IllegalArgumentException("Invalid input provided");
+            }
+            TicketDAO ticketDAO = new TicketDAO();
+            Ticket ticket = new Ticket();
+            ticket.setVehicleRegNumber(vehicleRegNumber);
+            ticket.setOutTime(Date.from(Instant.now()));
+            boolean ticketState = ticketDAO.testTicket(ticket);
+            if(ticketState){
+                System.out.println("Welcome Back");
             }
             return vehicleRegNumber;
         } catch (Exception e) {
